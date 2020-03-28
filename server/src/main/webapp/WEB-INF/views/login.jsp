@@ -14,7 +14,7 @@
     <%@include file="head.jsp" %>
 </head>
 <body>
-<div class="container">
+<div class="container" style="margin-top: 200px">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h1 align="center">这是用户登录页</h1>
@@ -26,15 +26,15 @@
                         <td><input type="text" name="userName" value="${userName}"></td>
                     </tr>
                     <br/>
-                    <tr>
+                    <tr style="height: 50px">
                         <td>密&nbsp;&nbsp;码:</td>
                         <td><input type="password" name="password"></td>
                     </tr>
-                    <tr>
-                        <td><input type="submit" value="登录" name="login"></td>
-                        <td><input type="reset" value="重置" name="reset"></td>
-                    </tr>
                 </table>
+                <div style="margin-left: 280px;">
+                    <input type="submit" value="登录" name="login" >
+                    <input type="reset" value="重置" name="reset" style="margin-left: 30px">
+                </div>
             </form>
 
             <h2 align="center">${userName}&nbsp;&nbsp;&nbsp;${errorMsg}</h2>

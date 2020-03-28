@@ -2,3 +2,5 @@
 /api/target/
 /model/target/
 /server/target/
+*.imi
+.idae
