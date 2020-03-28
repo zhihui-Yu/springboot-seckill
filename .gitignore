@@ -1,0 +1,4 @@
+# Project exclude paths
+/api/target/
+/model/target/
+/server/target/
