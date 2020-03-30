@@ -62,6 +62,11 @@ public class KillController {
         return response;
     }
 
+    /**
+     * 抢购后 跳转的页面
+     * @param url
+     * @return
+     */
     @RequestMapping(value = PREFIX+"/execute/{url}",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public String executeSuccess(@PathVariable String url){
