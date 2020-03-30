@@ -64,7 +64,7 @@ public class ItemController {
         try {
             modelMap.put("detail",itemServiceImpl.getKillDetail(id));
         }catch (Exception e ){
-            log.error("获取待秒杀商品详情--发生异常：id=",id,e.getStackTrace());
+            log.error("获取待秒杀商品详情--发生异常：id={}",id,e.getStackTrace());
             return "error";
         }
         return "info";
