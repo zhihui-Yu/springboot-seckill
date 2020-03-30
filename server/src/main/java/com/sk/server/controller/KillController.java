@@ -11,10 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.HttpSessionRequiredException;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import sun.security.provider.certpath.PKIXTimestampParameters;
 
 import javax.annotation.Resource;
@@ -63,5 +60,12 @@ public class KillController {
             response = new BaseResponse(StatusCode.Fail.getCode(),e.getMessage());
         }
         return response;
+    }
+
+    @RequestMapping(value = PREFIX+"/execute/{url}",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public String executeSuccess(@PathVariable String url){
+        if(url.equals("success")){  return "executeSuccess";   }
+        return "executeFail";
     }
 }
