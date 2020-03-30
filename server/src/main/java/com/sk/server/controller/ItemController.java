@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -41,7 +42,7 @@ public class ItemController {
      * 获取秒杀商品列表
      */
     @RequestMapping(value = {"/","/index",prefix+"/list",prefix+"/index.html"},method = RequestMethod.GET)
-    public String list(ModelMap modelMap) throws Exception{
+    public String list(ModelMap modelMap) {
         try{
             //获取代秒杀商品列表
             List<ItemKill> list = itemServiceImpl.getKillItems();
@@ -52,5 +53,20 @@ public class ItemController {
             return "redirect:error";
         }
         return "list";
+    }
+
+    @RequestMapping(value = prefix+"/detail/{id}",method = RequestMethod.GET)
+    public String detail(@PathVariable Integer id, ModelMap modelMap){
+        if(id == null || id < 0){
+            return "redirect:base";
+        }
+
+        try {
+            modelMap.put("detail",itemServiceImpl.getKillDetail(id));
+        }catch (Exception e ){
+            log.error("获取待秒杀商品详情--发生异常：id=",id,e.getStackTrace());
+            return "error";
+        }
+        return "info";
     }
 }

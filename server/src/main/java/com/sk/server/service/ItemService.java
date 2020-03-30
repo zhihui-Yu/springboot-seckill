@@ -11,6 +11,18 @@ import java.util.List;
  */
 public interface ItemService {
 
+    /**
+     * 获取待秒杀商品列表
+     * @return
+     * @throws Exception
+     */
     List<ItemKill> getKillItems() throws Exception;
 
+    /**
+     * 获取秒杀详情
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    ItemKill getKillDetail(Integer id) throws Exception;
 }

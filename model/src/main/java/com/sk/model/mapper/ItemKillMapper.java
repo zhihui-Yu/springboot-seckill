@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ItemKillMapper {
 
+    ItemKill selectById(Integer id);
+
     List<ItemKill> selectAll();
 
     int countByExample(ItemKillExample example);

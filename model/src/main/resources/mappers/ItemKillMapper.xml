@@ -15,7 +15,21 @@
         FROM item_kill AS a LEFT JOIN item AS b ON b.id = a.item_id
         WHERE a.is_active = 1
   </select>
-  
+
+
+  <select id="selectById" parameterType="java.lang.Integer" resultType="com.sk.model.entity.ItemKill">
+     SELECT
+        a.*,
+        b.name AS itemName,
+        (CASE WHEN (now() BETWEEN a.start_time AND a.end_time)
+            THEN 1
+         ELSE 0
+         END
+        ) AS canKill
+        FROM item_kill AS a LEFT JOIN item AS b ON b.id = a.item_id
+        WHERE a.is_active = 1 AND a.id = #{id}
+  </select>
+
   <resultMap id="BaseResultMap" type="com.sk.model.entity.ItemKill" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="item_id" property="itemId" jdbcType="INTEGER" />
