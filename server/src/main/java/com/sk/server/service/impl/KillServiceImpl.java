@@ -8,10 +8,12 @@ import com.sk.model.mapper.ItemKillMapper;
 import com.sk.model.mapper.ItemKillSuccessMapper;
 import com.sk.server.service.KillService;
 import com.sk.server.utils.RandomUtil;
+import com.sk.server.utils.SnowFlake;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.swing.text.html.parser.Entity;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -22,6 +24,7 @@ import java.util.Random;
 @Service
 public class KillServiceImpl implements KillService {
 
+    private SnowFlake snowFlake = new SnowFlake(2,3);
     @Resource
     private ItemKillSuccessMapper itemKillSuccessMapper;
 
@@ -64,11 +67,13 @@ public class KillServiceImpl implements KillService {
     private void commonRecordKillsuccessInfo(ItemKill kill,Integer userid) throws Exception{
         //记录抢购成功后生成的秒杀订单记录
         ItemKillSuccess item = new ItemKillSuccess();
-        item.setCode(RandomUtil.generaterOrderCode());
+        //item.setCode(RandomUtil.generaterOrderCode());
+        item.setCode(snowFlake.nextId()+"");
         item.setKillId(kill.getId());
         item.setItemId(kill.getItemId());
         item.setUserId(userid+"");
         item.setStatus((byte)0);
+        item.setCreateTime(new Date());
         int res = itemKillSuccessMapper.insertSelective(item);
 
         if(res > 0) {

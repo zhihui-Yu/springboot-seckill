@@ -47,7 +47,7 @@ public class KillController {
      */
     @RequestMapping(value = PREFIX+"/execute",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public BaseResponse excute(@RequestBody @Validated KillDto dto, BindingResult result, HttpSession session){
+    public BaseResponse excute(@RequestBody @Validated KillDto dto, BindingResult result){
         if(result.hasErrors() || dto.getKillId() <=0) {
             return new BaseResponse(StatusCode.InvalidParams);
         }

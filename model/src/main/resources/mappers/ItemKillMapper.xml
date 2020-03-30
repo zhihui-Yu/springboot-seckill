@@ -4,7 +4,7 @@
 
   <!--库存减一-->
   <update id="updateItemKillCount" parameterType="java.lang.Integer">
-    update item_kill set total = total - 1 where item_id = #{id}
+    update item_kill set total = total - 1 where id = #{id}
   </update>
   
   <!--查询待秒杀商品-->
