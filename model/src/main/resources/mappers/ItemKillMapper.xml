@@ -2,12 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sk.model.mapper.ItemKillMapper" >
 
+  <!--库存减一-->
+  <update id="updateItemKillCount" parameterType="java.lang.Integer">
+    update item_kill set total = total - 1 where item_id = #{id}
+  </update>
+  
   <!--查询待秒杀商品-->
   <select id="selectAll" resultType="com.sk.model.entity.ItemKill">
     SELECT
         a.*,
         b.name AS itemName,
-        (CASE WHEN (now() BETWEEN a.start_time AND a.end_time)
+        (CASE WHEN (now() BETWEEN a.start_time AND a.end_time) AND total > 0
             THEN 1
          ELSE 0
          END
@@ -21,7 +26,7 @@
      SELECT
         a.*,
         b.name AS itemName,
-        (CASE WHEN (now() BETWEEN a.start_time AND a.end_time)
+        (CASE WHEN (now() BETWEEN a.start_time AND a.end_time) AND total > 0
             THEN 1
          ELSE 0
          END
