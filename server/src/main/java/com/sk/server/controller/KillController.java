@@ -2,20 +2,21 @@ package com.sk.server.controller;
 
 import com.sk.api.enums.StatusCode;
 import com.sk.api.response.BaseResponse;
+import com.sk.model.dto.KillSuccessUserInfo;
+import com.sk.model.mapper.ItemKillSuccessMapper;
 import com.sk.server.dto.KillDto;
 import com.sk.server.service.KillService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.annotation.*;
-import sun.security.provider.certpath.PKIXTimestampParameters;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -34,12 +35,15 @@ public class KillController {
 
     @Resource
     private KillService killServiceImpl;
+
+    private ItemKillSuccessMapper itemKillSuccessMapper;
+
     /**
      * 秒杀商品核心业务
      *
      * @param dto
      * @param result
-     * @param session
+     * @param //session
      * @return
      */
     @RequestMapping(value = PREFIX+"/execute",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -63,12 +67,29 @@ public class KillController {
     }
 
     /**
+     * 查看订单详情
+     * @return
+     */
+    @RequestMapping(value = PREFIX+"/record/detail/{orderNo}",method = RequestMethod.GET)
+    public String killRecordDetail(@PathVariable String orderNo, ModelMap modelMap){
+        if (StringUtils.isBlank(orderNo)){
+            return "error";
+        }
+        System.out.println(orderNo);
+        KillSuccessUserInfo info = itemKillSuccessMapper.selectByCode(orderNo);
+        if (info==null){
+            return "error";
+        }
+        modelMap.put("info",info);
+        return "killRecord";
+    }
+
+    /**
      * 抢购后 跳转的页面
      * @param url
      * @return
      */
-    @RequestMapping(value = PREFIX+"/execute/{url}",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
+    @RequestMapping(value = PREFIX+"/execute/{url}",method = RequestMethod.GET)
     public String executeSuccess(@PathVariable String url){
         if(url.equals("success")){  return "executeSuccess";   }
         return "executeFail";

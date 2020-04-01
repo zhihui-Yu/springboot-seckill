@@ -7,8 +7,10 @@ import com.sk.model.entity.ItemKillSuccessExample;
 import com.sk.model.mapper.ItemKillMapper;
 import com.sk.model.mapper.ItemKillSuccessMapper;
 import com.sk.server.service.KillService;
+import com.sk.server.service.RabbitSenderService;
 import com.sk.server.utils.RandomUtil;
 import com.sk.server.utils.SnowFlake;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -30,6 +32,9 @@ public class KillServiceImpl implements KillService {
 
     @Resource
     private ItemKillMapper itemKillMapper;
+
+    @Resource
+    private RabbitSenderService rabbitSenderService;
 
     /**
      * 商品秒杀处理
@@ -68,7 +73,8 @@ public class KillServiceImpl implements KillService {
         //记录抢购成功后生成的秒杀订单记录
         ItemKillSuccess item = new ItemKillSuccess();
         //item.setCode(RandomUtil.generaterOrderCode());
-        item.setCode(snowFlake.nextId()+"");
+        String code = snowFlake.nextId()+"";
+        item.setCode(code);
         item.setKillId(kill.getId());
         item.setItemId(kill.getItemId());
         item.setUserId(userid+"");
@@ -78,6 +84,7 @@ public class KillServiceImpl implements KillService {
 
         if(res > 0) {
             //进行异步发送邮件通知
+            rabbitSenderService.sendKillSuccesEmailMsg(code);
         }
     }
 

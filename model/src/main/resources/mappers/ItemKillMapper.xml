@@ -4,7 +4,7 @@
 
   <!--库存减一-->
   <update id="updateItemKillCount" parameterType="java.lang.Integer">
-    update item_kill set total = total - 1 where id = #{id}
+    update item_kill set total = total - 1 where id = #{id} and total > 0;
   </update>
   
   <!--查询待秒杀商品-->
@@ -18,7 +18,7 @@
          END
         ) AS canKill
         FROM item_kill AS a LEFT JOIN item AS b ON b.id = a.item_id
-        WHERE a.is_active = 1
+        WHERE a.is_active = 1 and a.total > 0;
   </select>
 
 
@@ -32,7 +32,7 @@
          END
         ) AS canKill
         FROM item_kill AS a LEFT JOIN item AS b ON b.id = a.item_id
-        WHERE a.is_active = 1 AND a.id = #{id}
+        WHERE a.is_active = 1 AND a.id = #{id}  and a.total > 0;
   </select>
 
   <resultMap id="BaseResultMap" type="com.sk.model.entity.ItemKill" >
