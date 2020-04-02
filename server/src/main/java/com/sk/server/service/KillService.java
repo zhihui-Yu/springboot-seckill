@@ -15,5 +15,4 @@ public interface KillService {
 
     Boolean killItemV4(Integer killId, Integer userId) throws Exception;
 
-    Boolean killItemV5(Integer killId, Integer userId) throws Exception;
 }

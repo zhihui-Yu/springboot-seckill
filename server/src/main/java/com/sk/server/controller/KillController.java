@@ -55,7 +55,17 @@ public class KillController {
         BaseResponse response = new BaseResponse(StatusCode.Success);
 
         try {
-            Boolean res = killServiceImpl.killItem(dto.getKillId(), dto.getUserId());
+            //TODO: 1. 没有分布式锁的情况下  实现秒杀业务  当QPS高时 可能有问题
+            //Boolean res = killServiceImpl.killItem(dto.getKillId(), dto.getUserId());
+
+            //TODO: 2. 使用 redis 分布式锁 实现秒杀业务
+            Boolean res = killServiceImpl.killItemV2(dto.getKillId(), dto.getUserId());
+
+            //TODO: 3. 使用 redisson 分布式锁 实现秒杀业务
+            //Boolean res = killServiceImpl.killItemV3(dto.getKillId(), dto.getUserId());
+
+            //TODO: 4. 使用 zookeeper 分布式锁 实现秒杀业务
+            //Boolean res = killServiceImpl.killItemV4(dto.getKillId(), dto.getUserId());
             //不成功
             if(!res) {
                 return new BaseResponse(StatusCode.Fail.getCode(),"商品已抢购完");
