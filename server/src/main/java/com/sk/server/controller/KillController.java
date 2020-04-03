@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -43,15 +44,20 @@ public class KillController {
      *
      * @param dto
      * @param result
-     * @param //session
+     * @param session
      * @return
      */
     @RequestMapping(value = PREFIX+"/execute",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public BaseResponse excute(@RequestBody @Validated KillDto dto, BindingResult result){
+    public BaseResponse excute(@RequestBody @Validated KillDto dto, BindingResult result, HttpSession session){
         if(result.hasErrors() || dto.getKillId() <=0) {
             return new BaseResponse(StatusCode.InvalidParams);
         }
+        Object uid = session.getAttribute("uid");
+        if(uid==null || uid.equals("")){
+            return new BaseResponse(StatusCode.UserNotLogin);
+        }
+
         BaseResponse response = new BaseResponse(StatusCode.Success);
 
         try {
@@ -59,7 +65,7 @@ public class KillController {
             //Boolean res = killServiceImpl.killItem(dto.getKillId(), dto.getUserId());
 
             //TODO: 2. 使用 redis 分布式锁 实现秒杀业务
-            Boolean res = killServiceImpl.killItemV2(dto.getKillId(), dto.getUserId());
+            Boolean res = killServiceImpl.killItemV2(dto.getKillId(), (Integer)uid);
 
             //TODO: 3. 使用 redisson 分布式锁 实现秒杀业务
             //Boolean res = killServiceImpl.killItemV3(dto.getKillId(), dto.getUserId());
@@ -71,6 +77,7 @@ public class KillController {
                 return new BaseResponse(StatusCode.Fail.getCode(),"商品已抢购完");
             }
         }catch (Exception e ) {
+            LOG.info("秒杀业务出现异常");
             response = new BaseResponse(StatusCode.Fail.getCode(),e.getMessage());
         }
         return response;
@@ -81,7 +88,10 @@ public class KillController {
      * @return
      */
     @RequestMapping(value = PREFIX+"/record/detail/{orderNo}",method = RequestMethod.GET)
-    public String killRecordDetail(@PathVariable String orderNo, ModelMap modelMap){
+    public String killRecordDetail(@PathVariable String orderNo, ModelMap modelMap,HttpSession session){
+        if(session.getAttribute("uid")==null){
+            return "redirect:/unauth";
+        }
         if (StringUtils.isBlank(orderNo)){
             return "error";
         }

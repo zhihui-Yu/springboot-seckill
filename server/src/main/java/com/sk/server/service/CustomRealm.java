@@ -32,7 +32,7 @@ public class CustomRealm extends AuthorizingRealm {
     private UserMapper userMapper;
 
     /**
-     * 认证
+     * 授权
      * @param principalCollection
      * @return
      */
@@ -42,7 +42,7 @@ public class CustomRealm extends AuthorizingRealm {
     }
 
     /**
-     * 授权
+     * 认证 --- 登入
      * @param authenticationToken 含有用户信息的token
      * @return
      * @throws AuthenticationException 异常

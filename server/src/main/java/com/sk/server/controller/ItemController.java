@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.Calendar;
 import java.util.List;
 
@@ -55,8 +56,19 @@ public class ItemController {
         return "list";
     }
 
+    /**
+     * 查看商品详情
+     * @param id 商品id
+     * @param modelMap 页面渲染
+     * @param session 会话
+     * @return
+     */
     @RequestMapping(value = prefix+"/detail/{id}",method = RequestMethod.GET)
-    public String detail(@PathVariable Integer id, ModelMap modelMap){
+    public String detail(@PathVariable Integer id, ModelMap modelMap,HttpSession session){
+        Object uid = session.getAttribute("uid");
+        if(uid == null){
+            return "redirect:/unauth";
+        }
         if(id == null || id < 0){
             return "redirect:base";
         }

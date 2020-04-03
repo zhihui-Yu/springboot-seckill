@@ -31,9 +31,9 @@
                         <td><input type="password" name="password"></td>
                     </tr>
                 </table>
-                <div style="margin-left: 280px;">
+                <div style="margin-left: 45%;">
                     <input type="submit" value="登录" name="login" >
-                    <input type="reset" value="重置" name="reset" style="margin-left: 30px">
+                    <input type="reset" value="重置" name="reset" style="margin-left: 5%">
                 </div>
             </form>
 
